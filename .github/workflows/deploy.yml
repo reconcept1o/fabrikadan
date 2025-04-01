@@ -1,0 +1,34 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main  # main dalına push geldiğinde çalışsın
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Use Node.js 16
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Build
+        run: yarn build
+
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages           # Derlenmiş dosyaları gh-pages dalına atacak
+          folder: build             # build çıktısı buradan alınacak
+          clean: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit_message: "Deployed from GitHub Actions"

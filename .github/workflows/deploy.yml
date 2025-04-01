@@ -3,7 +3,7 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches:
-      - main  # main dalına push geldiğinde çalışsın
+      - main  # main dalına push geldiğinde tetiklenecek
 
 jobs:
   build-and-deploy:
@@ -20,15 +20,17 @@ jobs:
 
       - name: Install dependencies
         run: yarn install
+        working-directory: client
 
       - name: Build
         run: yarn build
+        working-directory: client
 
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          branch: gh-pages           # Derlenmiş dosyaları gh-pages dalına atacak
-          folder: build             # build çıktısı buradan alınacak
+          branch: gh-pages
+          folder: client/build  # build klasörü "client" içinde oluşur
           clean: true
           token: ${{ secrets.GITHUB_TOKEN }}
           commit_message: "Deployed from GitHub Actions"
